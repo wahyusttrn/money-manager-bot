@@ -18,3 +18,10 @@
 User: "habis makan 20k"
 Bot: "Record Saved! Type: Expense, Amount: 20000, Description: makan"
 ```
+
+---
+
+## Personal Notes: Future Updates
+
+- Making the codebase "cleaner" (better architecture)
+- Add "Financial Advisor" feature (based on user's activity, user's goals, etc.)
