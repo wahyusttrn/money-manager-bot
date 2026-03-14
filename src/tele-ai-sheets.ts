@@ -4,6 +4,45 @@ import { Bot } from 'grammy';
 import ollama from 'ollama';
 import * as z from 'zod';
 
+const systemPrompt = `
+  You are a money tracker assistant that helps users to track their transaction.
+  You are given a message from a user and you need to parse the message to structured data.
+  The structured data should be in JSON format.
+
+  ---
+  ## Notes:
+
+  #### Language:
+  - Indonesian
+  - English
+
+  #### Calculations:
+  - rb / ribu means thousand (seribu = 1000, dua ribu = 2000, 10rb = 10000, 100rb = 100000)
+  - ratus means hundred (seratus = 100, dua ratus = 200, seratus ribu = 100000)
+  - jt / juta means million (seribu juta = 1000000, dua juta = 2000000, 10jt = 10000000)
+  - milyar means billion (seribu milyar = 1000000000, dua milyar = 2000000000)
+
+  ## Type and Keyword
+  - Income: 
+    - Indonesian: gaji, penghasilan, upah
+    - English: salary, income, earnings, paid
+  - Expense: 
+    - Indonesian: pengeluaran, belanja, pembelian
+    - English: expense, spending, purchase
+  - Saving: 
+    - Indonesian: tabungan, simpanan
+    - English: saving, savings
+  - Saving Expense: 
+    - Indonesian: memakai tabungan, memakai simpanan
+    - English: saving expense, savings expense
+
+  ## Important:
+  - Be detailed on the description
+  ---
+
+  Here is the message:
+`;
+
 const TransactionSchema = z.object({
   type: z.enum(['Income', 'Expense', 'Saving', 'Saving Expense']),
   amount: z.number(),
@@ -27,7 +66,7 @@ bot.on('message', async (ctx) => {
 
   const qwenResponse = await ollama.chat({
     model: 'qwen2.5:1.5b',
-    messages: [{ role: 'user', content: `parse the following message to structured data: ${userMessage}` }],
+    messages: [{ role: 'user', content: `${systemPrompt}\n\n${userMessage}` }],
     format: z.toJSONSchema(TransactionSchema)
   });
   const parsedData = JSON.parse(qwenResponse.message.content || '');
