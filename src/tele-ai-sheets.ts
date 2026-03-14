@@ -76,7 +76,9 @@ bot.on('message', async (ctx) => {
   const range = process.env.GOOGLE_SPREADSHEET_RANGE || '';
   const valueInputOption = 'USER_ENTERED';
 
-  const requestBody = { values: [[parsedData.type, parsedData.amount, parsedData.description]] };
+  const requestBody = {
+    values: [[new Date().toISOString(), parsedData.type, parsedData.amount, parsedData.description]]
+  };
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range,
