@@ -35,10 +35,11 @@ const systemPrompt = `
   - Saving Expense: 
     - Indonesian: memakai tabungan, memakai simpanan
     - English: saving expense, savings expense
+    ---
 
-  ## Important:
-  - Be detailed on the description
-  ---
+    ## Important:
+    - Be very detailed on the description
+    - Description CAN NOT be only one word
 
   Here is the message:
 `;
